@@ -4,8 +4,29 @@ body {
 }
 
 .char {
-    height: 120px;
+    height: 128px;
     background-color: white;
-    padding: 3px;
-    margin: 3px;
+    border: 2px solid black;
+}
+
+.box1 {
+    background-color: white;
+    padding: 0px 3px;
+    color: black;
+    border: 3px solid black;
+}
+.box2 {
+    background-color: red;
+    padding: 0px 3px;
+    color: green;
+    border: 3px solid green;
+}
+.box3 {
+    background-color: black;
+    padding: 0px 3px;
+    color: white;
+    border: 3px solid white;
+}
+p{
+    padding: 0px;
 }
