@@ -1,8 +1,8 @@
 $(document).ready(function(){
 
 var char=[];
-var charDiv;
-var charIndex;
+var charDiv=[];
+var charIndex = -1;
 var charIndex1;
 var charIndex2;
 var charName;
@@ -21,15 +21,10 @@ var boxNum;
   
 //initialize cards (stage = 0)
 
-for (var i=0; i<char.length; i++){
 
-    charCardCreate(i,"white","black");
+initialize();
 
-    boxNum = "#box0" + i;
 
-    $(boxNum).append(charDiv);  //add to back
-
-}
  //once I move them to the staging area, the characters aren't recognized as characters...(class = char) 
  // at first creation, they are recoginzed with classes 'char' and 'icons'.  After they are moved,
  // they are only recognize with class 'box1' (the class of the div into which they're appended) 
@@ -40,7 +35,9 @@ for (var i=0; i<char.length; i++){
 $(".char").on("click",function(){
 
     charIndex = $(this).val();
-    console.log(charIndex)
+    console.log(charIndex);
+
+
     stage++;
     console.log(stage);
 
@@ -48,14 +45,15 @@ $(".char").on("click",function(){
         charIndex1 = charIndex;
       for (var i=0; i<char.length; i++){
          
-        if (i != charIndex1){
+        if (i != charIndex1){       //using 'detach' and 'appendTo' preserves attributes of divs
 
-            boxToEmpty = "#box0" + i;
-            $(boxToEmpty).remove();
-
-            charDiv = charCardCreate(i,"red","green");
-            boxNum = "#box1" + i;          
-            $(boxNum).append(charDiv); 
+            charDiv[i] = charDiv[i].detach();
+             boxNum = "#box1" + i;          
+             charDiv[i].appendTo(boxNum);
+             charDiv[i].css('background-color','red');
+             charDiv[i].css('color','green')
+             charDiv[i].css('margin','3px');
+      
 
         } //end of if
         
@@ -72,26 +70,29 @@ $(".char").on("click",function(){
              
             if ((j != charIndex1)&&(j != charIndex2)) {
     
-                boxToEmpty = "#box1" + j;
-                $(boxToEmpty).remove();
+                charDiv[j] = charDiv[j].detach();
       
             } //end of if that clears non-chosen players
 
             else if (j == charIndex2){
 
-                charDiv = charCardCreate(j,"black","white");
                 boxNum = "#box2" + j;          
-                $(boxNum).append(charDiv); 
+
+                charDiv[j].appendTo(boxNum);
+                charDiv[j].css('background-color','black');
+                charDiv[j].css('color','white')    
 
             }  // end of else that stages defender
             
         } //end of for
     } // end of stage 2 if
-    else {
+    else {      // this block will be for 'attack' clicks
         console.log("Stage is not 1 or 2");
     }
     
     })
+
+
 
     $(".box1").on("click",function(){
         console.log("recognized as box1");
@@ -117,7 +118,7 @@ function charConstructor(name,url,hp) {
 
 
 function charCardCreate(index,backColor,textColor){
-    charDiv = $('<div class="icons" >');  //new div for images
+    charDiv[index] = $('<div class="icons" >');  //new div for images
     
         charName = $("<p>");
         hp   = $("<p>");
@@ -137,17 +138,28 @@ function charCardCreate(index,backColor,textColor){
         hp.html(char[index].hp);
         hp.css('color',textColor);
 
-        charDiv.append(charName);        
-        charDiv.append(charImg);  //put into dynamically created div
-        charDiv.append(hp);
-        charDiv.css('background-color',backColor);
-        charDiv.css('margin','3px');
+        charDiv[index].append(charName);        
+        charDiv[index].append(charImg);  //put into dynamically created div
+        charDiv[index].append(hp);
+        charDiv[index].css('background-color',backColor);
+        charDiv[index].css('margin','3px');
         
 
-        return charDiv;
+        return charDiv[index];
  
 }
 
+function initialize(){
+    
+        for (var i=0; i<char.length; i++){
+    
+            charCardCreate(i,"white","black");
+            boxNum = "#box0" + i;
+            $(boxNum).append(charDiv[i]);  //add to back
+    
+        }
+    }
+    
 
 
 })
