@@ -12,6 +12,7 @@ var charImg;
 var stage = 0;
 var boxToEmpty;
 var boxNum;
+var health, attack, wins, losses;
 
 
     char[0] = new charConstructor('Bugs Bunny',"assets/images/bugsicon.jpg",100);
@@ -21,17 +22,19 @@ var boxNum;
   
 //initialize cards (stage = 0)
 
+$(".attack").hide();
+$("#newbattle").hide();
+$("#left").hide();
 
 initialize();
 
+$("#start").on("click",function(){
+    $("#left").show();
+});
+    
 
- //once I move them to the staging area, the characters aren't recognized as characters...(class = char) 
- // at first creation, they are recoginzed with classes 'char' and 'icons'.  After they are moved,
- // they are only recognize with class 'box1' (the class of the div into which they're appended) 
+
  
- // can I get them out of a click function?  They are being virtually created by the same function
- // that created them to begin with.  They are showing up.  Why are attributes changing?
-
 $(".char").on("click",function(){
 
     charIndex = $(this).val();
@@ -87,6 +90,10 @@ $(".char").on("click",function(){
 
         charDiv[charIndex1].animate({top:"190px",left:"80px"},2000);
         charDiv[charIndex2].animate({top:"-20px",left:"350px"},2000);
+
+        $(".attack").show();
+        $("#newbattle").show();
+        
         
     } // end of stage 2 if
     else {      // this block will be for 'attack' clicks
@@ -96,24 +103,31 @@ $(".char").on("click",function(){
     })
 
 
-
+// this intentionally resets characters so new opponents can be chosen
     $("#newbattle").on("click",function(){
         for (var k=0; k<char.length; k++){
             charDiv[k].detach();
             boxNum = "#box0" + i;
             $(boxNum).append(charDiv[i]);  //add to back
-             
- //           initialize();            
-        }
+         }
     })
 
-    // $(".icons").on("click",function(){
-    //     console.log("recognized as icons");
-    // })
+    
+    $(".attack").on("click",function(){
+        health = char[charIndex1].hp;
+        attack = 5     //placeholder
+       $("#health").html("Health: " + health + "Attack Strength: " + attack);
+       $("#stats").html("Wins: " + wins + "Losses: " + losses);            
+    })
 
-    // $(".char").on("click",function(){
-    //     console.log("recognized as char");
-    // })
+
+    $(".icons").on("click",function(){
+        console.log("recognized as icons");
+    })
+
+    $(".char").on("click",function(){
+        console.log("recognized as char");
+    })
   
     
 
@@ -163,14 +177,17 @@ function charCardCreate(index,backColor,textColor){
 
 function initialize(){
     
+        wins = 0;
+        losses = 0;
+    
         for (var i=0; i<char.length; i++){
     
             charCardCreate(i,"yellow","CornflowerBlue");
             boxNum = "#box0" + i;
-            $(boxNum).append(charDiv[i]);  //add to back
+            $(boxNum).append(charDiv[i]);
     
         }
-    }
+};
     
 
 

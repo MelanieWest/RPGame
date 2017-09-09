@@ -1,16 +1,17 @@
 <!DOCUMENT>
 <html lang=en>
 <head>
+        <script
+        src="https://code.jquery.com/jquery-3.2.1.js"
+        integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+        crossorigin="anonymous"></script>        
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 <link rel ="stylesheet" href="assets/css/style.css">
 <title>RPG</title>
 </head>
 <body>
-        <script
-        src="https://code.jquery.com/jquery-3.2.1.js"
-        integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
-        crossorigin="anonymous"></script>
 <header>  
+        <button class ="btn btn-danger" id="start">DANGER ACME EXPLOSIVES</button>
         <!-- <img src = "assets/images/looney-tunes.png" alt = "Looney Tunes" /> -->
         <img src = "assets/images/show-logo-looneyTunes.png" alt = "Looney Tunes" />
         <!-- <img src = "assets/images/Title_image.png" alt = "Looney Tunes" /> -->
@@ -56,13 +57,11 @@
 
         <div class ="col col-md-3" id = "right">
             <div class = "box3" id = "box33">
-                    <form>
-                        <button class= "btn btn-primary" id = "newbattle">New Battle</button>
-                        <button class= "btn btn-warning" id = "attack"> Attack</button>
-                    </form>
-                    <p id = "health"></p>
-                    <p id = "stats"></p>
-                </div>                                                       
+                <button class= "btn btn-primary" id = "newbattle">New Battle</button>
+                <button class= "btn btn-warning attack"> Attack</button>
+                <p id = "health">H</p>
+                <p id = "stats">S</p>
+            </div>                                                       
     </div>
     </div>
     <script type="text/javascript" src="assets/javascript/game.js"></script>
