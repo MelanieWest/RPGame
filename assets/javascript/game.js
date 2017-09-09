@@ -51,7 +51,6 @@ $(".char").on("click",function(){
              boxNum = "#box1" + i;          
              charDiv[i].appendTo(boxNum);
              charDiv[i].css('background-color','red');
-             charDiv[i].css('color','green')
              charDiv[i].css('margin','3px');
       
 
@@ -80,11 +79,15 @@ $(".char").on("click",function(){
 
                 charDiv[j].appendTo(boxNum);
                 charDiv[j].css('background-color','black');
-                charDiv[j].css('color','white')    
+                charDiv[j].css('margin','3px');    
 
             }  // end of else that stages defender
             
         } //end of for
+        
+        charDiv[charIndex1].animate({top:"190px",left:"80px"},2000);
+        charDiv[charIndex2].animate({top:"-20px",left:"350px"},2000);
+        
     } // end of stage 2 if
     else {      // this block will be for 'attack' clicks
         console.log("Stage is not 1 or 2");
@@ -94,17 +97,17 @@ $(".char").on("click",function(){
 
 
 
-    $(".box1").on("click",function(){
-        console.log("recognized as box1");
-    })
+    // $(".box1").on("click",function(){
+    //     console.log("recognized as box1");
+    // })
 
-    $(".icons").on("click",function(){
-        console.log("recognized as icons");
-    })
+    // $(".icons").on("click",function(){
+    //     console.log("recognized as icons");
+    // })
 
-    $(".char").on("click",function(){
-        console.log("recognized as char");
-    })
+    // $(".char").on("click",function(){
+    //     console.log("recognized as char");
+    // })
   
     
 
@@ -119,14 +122,16 @@ function charConstructor(name,url,hp) {
 
 function charCardCreate(index,backColor,textColor){
     charDiv[index] = $('<div class="icons" >');  //new div for images
+    charDiv[index].css('position','relative');
     
-        charName = $("<p>");
-        hp   = $("<p>");
+        charName = $("<p class='name'>");
+        hp   = $("<p class = 'hp' >");
             
         charImg = $('<img>');
 
         charName.html(char[index].name);
         charName.css('color',textColor);
+        charName.css('text-shadow','1px 1px #AAA')
         charImg.attr("src",char[index].url);
         charImg.attr("class","char");
         charImg.attr("width","128px");
@@ -137,7 +142,8 @@ function charCardCreate(index,backColor,textColor){
 
         hp.html(char[index].hp);
         hp.css('color',textColor);
-
+        hp.css('text-shadow','1px 1px #AAA')
+        
         charDiv[index].append(charName);        
         charDiv[index].append(charImg);  //put into dynamically created div
         charDiv[index].append(hp);
@@ -153,7 +159,7 @@ function initialize(){
     
         for (var i=0; i<char.length; i++){
     
-            charCardCreate(i,"white","black");
+            charCardCreate(i,"yellow","CornflowerBlue");
             boxNum = "#box0" + i;
             $(boxNum).append(charDiv[i]);  //add to back
     
