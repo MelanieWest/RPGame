@@ -30,20 +30,37 @@ $(".char").on("click",function(){
 
         charIndex = $(this).val();
  
-        $("this").clone().appendTo("#box20");
+        //$("this").clone().appendTo("#box20");
         // console.log($(this).val());
         // console.log(charIndex); 
         // console.log("hello");
 
 
-        console.log($(this).val());
-        console.log(charIndex); 
+        // console.log($(this).val());
+        // console.log(charIndex); 
     
-        var boxToEmpty = "#box0" + charIndex;
-        $(boxToEmpty).remove();
+        // var boxToEmpty = "#box0" + charIndex;
+        // $(boxToEmpty).remove();
     
-        charDiv = charCardCreate(charIndex);
-        $("#box10").append(charDiv);   
+        // charDiv = charCardCreate(charIndex,"red","green");
+        // $("#box10").append(charDiv);   
+        // charDiv = charCardCreate(charIndex,"black","white");
+        // $("#box20").append(charDiv); 
+   
+        for (var i=0; i<char.length; i++){
+         
+        if (i != charIndex){
+
+            var boxToEmpty = "#box0" + i;
+            $(boxToEmpty).remove();
+
+            charDiv = charCardCreate(i,"red","green");
+            var boxNum = "#box1" + i;          
+            $(boxNum).append(charDiv);   
+        } //end of if
+        
+        } //end of for
+        
     
     })
    
