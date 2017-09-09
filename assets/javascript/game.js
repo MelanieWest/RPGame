@@ -84,7 +84,7 @@ $(".char").on("click",function(){
             }  // end of else that stages defender
             
         } //end of for
-        
+
         charDiv[charIndex1].animate({top:"190px",left:"80px"},2000);
         charDiv[charIndex2].animate({top:"-20px",left:"350px"},2000);
         
@@ -97,9 +97,15 @@ $(".char").on("click",function(){
 
 
 
-    // $(".box1").on("click",function(){
-    //     console.log("recognized as box1");
-    // })
+    $("#newbattle").on("click",function(){
+        for (var k=0; k<char.length; k++){
+            charDiv[k].detach();
+            boxNum = "#box0" + i;
+            $(boxNum).append(charDiv[i]);  //add to back
+             
+ //           initialize();            
+        }
+    })
 
     // $(".icons").on("click",function(){
     //     console.log("recognized as icons");

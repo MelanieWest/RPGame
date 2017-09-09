@@ -3,6 +3,18 @@ body {
     background-size: 100% 100%;
 }
 
+header {
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    top: 0px;
+    background-color: Cornflowerblue;
+    color: white;
+    text-shadow: 2px 2px black;
+    font-size: 36px;
+    text-align: right;
+    image-rendering: right;
+}   
 .char {
     height: 128px;
     background-color: white;
@@ -21,11 +33,13 @@ body {
 
 }
 #box33{
-    background-color: black;
+    position: relative;
+    top: 300px;
+    /* background-color: black;
+    border: 3px solid white;
+    width: 140px; */
     padding: 0px 3px;
     color: white;
-    border: 3px solid white;
-    width: 140px;
 }
 
 p{

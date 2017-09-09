@@ -10,7 +10,16 @@
         src="https://code.jquery.com/jquery-3.2.1.js"
         integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
         crossorigin="anonymous"></script>
+<header>  
+        <!-- <img src = "assets/images/looney-tunes.png" alt = "Looney Tunes" /> -->
+        <img src = "assets/images/show-logo-looneyTunes.png" alt = "Looney Tunes" />
+        <!-- <img src = "assets/images/Title_image.png" alt = "Looney Tunes" /> -->
+</header>
 
+<audio controls>
+        <source src="C:\Users\dhmof\Desktop\bootcamp\HomeWork\3week\RPG\RPGame\assets\images\looney_tunes_opening2.mp3" type="audio/mp3">
+      Looney tunes music
+</audio>
     <div class = "row">
         <div class ="col col-md-9" id = "left">
             <div class = "row" id = "row1">
@@ -47,7 +56,13 @@
 
         <div class ="col col-md-3" id = "right">
             <div class = "box3" id = "box33">
-            </div>                                                       
+                    <form>
+                        <button class= "btn btn-primary" id = "newbattle">New Battle</button>
+                        <button class= "btn btn-warning" id = "attack"> Attack</button>
+                    </form>
+                    <p id = "health"></p>
+                    <p id = "stats"></p>
+                </div>                                                       
     </div>
     </div>
     <script type="text/javascript" src="assets/javascript/game.js"></script>
