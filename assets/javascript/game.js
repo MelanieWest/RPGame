@@ -2,42 +2,51 @@ $(document).ready(function(){
 
 var char=[];
 var charDiv;
+var charIndex;
+var charName;
+var name;
+var hp;
+var charImg;
+
 
     char[0] = new charConstructor('Bugs Bunny',"assets/images/bugsicon.jpg",100);
     char[1] = new charConstructor('Road Runner',"assets/images/rricon.png",120);
     char[2] = new charConstructor('Wile E. Coyote',"assets/images/wileicon.png",150);
     char[3] = new charConstructor('Yosemite Sam',"assets/images/samicon.png",200);
-     
-
-$(".char").on("click",function(){
-
-    var charIndex = $(this).val();
-    console.log(charIndex);
-
-    var boxToEmpty = "#box0" + charIndex;
-    $(boxToEmpty).remove();
-
-    charDiv = charCardCreate(charIndex);
-    $("#box20").append(charDiv);   
-});
-
-
-
+  
 
 for (var i=0; i<char.length; i++){
     
-  charCardCreate(i);
+    charCardCreate(i,"white","black");
 
-   //for now, locate the characters around the board to see if
-   // the boxes hold their locations in rows and keep the colors
-   //initially they should be put in "#box0"+i (top row).
-   //moving them is proving challenging.
+    var boxNum = "#box0" + i;
 
-  var boxNum = "#box"+ i + i;
-  $(boxNum).append(charDiv);  //add to back
+    $(boxNum).append(charDiv);  //add to back
 
-  }
+}
     
+
+$(".char").on("click",function(){
+
+        charIndex = $(this).val();
+ 
+        $("this").clone().appendTo("#box20");
+        // console.log($(this).val());
+        // console.log(charIndex); 
+        // console.log("hello");
+
+
+        console.log($(this).val());
+        console.log(charIndex); 
+    
+        var boxToEmpty = "#box0" + charIndex;
+        $(boxToEmpty).remove();
+    
+        charDiv = charCardCreate(charIndex);
+        $("#box10").append(charDiv);   
+    
+    })
+   
 
 
 //object constructor function
@@ -49,22 +58,29 @@ function charConstructor(name,url,hp) {
 }
 
 
-function charCardCreate(index){
-    charDiv = $('<div class="icons">');  //new div for images
+function charCardCreate(index,backColor,textColor){
+    charDiv = $('<div class="icons" background-color = ' + backColor + '>');  //new div for images
     
-        var name = $("<p>");
-        var hp   = $("<p>");
+        charName = $("<p color=" + textColor+ ">");
+        hp   = $("<p color = " + textColor+ ">");
             
-        var charImg = $('<img>');
+        charImg = $('<img>');
 
-        name.html(char[index].name);
+        charName.html(char[index].name);
+        charName.css('color',textColor)
         charImg.attr("src",char[index].url);
         charImg.attr("class","char");
         charImg.attr("width","128px");
-        charImg.attr("value",index);
-        hp.html(char[index].hp);
+        charImg.val(index);
 
-        charDiv.append(name);
+        console.log(charImg.attr("class"));
+        console.log(charImg.val());
+
+        hp.html(char[index].hp);
+        hp.css('color',textColor);
+
+        charDiv.append(charName);
+        charDiv.css('background-color',backColor);
         charDiv.append(charImg);  //put into dynamically created div
         charDiv.append(hp);
 
@@ -72,4 +88,7 @@ function charCardCreate(index){
  
 }
 
+
+
 })
+  
