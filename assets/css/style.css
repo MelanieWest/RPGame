@@ -29,8 +29,10 @@ header {
 }
 .box2 {
     padding: 0px 3px;
+}
 
-
+.btn{
+    border: 2px double blue;
 }
 #box33{
     position: relative;
@@ -45,4 +47,9 @@ header {
 p{
     padding: 0px;
     text-align: center;
+}
+
+#health, #defender, #stats {
+    color: white;
+    background-color: cornflowerblue;
 }
