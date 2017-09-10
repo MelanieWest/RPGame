@@ -34,8 +34,11 @@ header {
 .btn{
     border: 2px double blue;
 }
+
+/* need relative position for animation */
+
 #box33{
-    position: relative;
+    position: relative; 
     top: 250px;
     /* background-color: black;
     border: 3px solid white;

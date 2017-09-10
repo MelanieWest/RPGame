@@ -1,8 +1,6 @@
 $(document).ready(function(){
-
-var char=[];
-var charDiv=[];
-var charIndex = -1;
+var char=[], charDiv=[], defenders =[];
+var charIndex = -1, defIndex;
 var charIndex1, charIndex2;
 var charName, charImg;
 var name,hp,ap,rp;
@@ -28,6 +26,7 @@ initialize();
 
 $("#start").on("click",function(){
     $("#left").show();
+    $("#start").hide();
 });
     
 
@@ -47,6 +46,8 @@ $(".char").on("click",function(){
       for (var i=0; i<char.length; i++){
          
         if (i != charIndex1){       //using 'detach' and 'appendTo' preserves attributes of divs
+            
+            defenders.push(i);      //create an array of defenders (not yet used...)
 
             charDiv[i] = charDiv[i].detach();
              boxNum = "#box1" + i;          
@@ -55,18 +56,27 @@ $(".char").on("click",function(){
              charDiv[i].css('margin','3px');
       
 
-        } //end of if
-        
+        } //end of if       
       } //end of for
+
+      console.log(defenders);  //check if indices of defenders is logged
+
     }   //end of stage 1 
     
     else if (stage == 2){           // in stage 2 defender is chosen (index = charIndex2)
 
         charIndex2 = charIndex;
 
-        console.log(charIndex2)        
+        defIndex=defenders.indexOf(charIndex2);  //where in the array is this index found?
+
+        console.log("defender chosen was at index "+defIndex);// getting -1 right now
+
+        defenders.splice(defIndex, 1);      //try to modify defenders array for next cycle (not yet used)
+
+        console.log('remaining defender indices: ' + defenders); //not working
+        console.log("defender chosen: " + char[charIndex2].name);   //is working
    
-        for (var j=0; j<char.length; j++){
+        for (var j=0; j<char.length; j++){  // remove non-chosen players from display
              
             if ((j != charIndex1)&&(j != charIndex2)) {
     
@@ -74,7 +84,7 @@ $(".char").on("click",function(){
       
             } //end of if that clears non-chosen players
 
-            else if (j == charIndex2){
+            else if (j == charIndex2){      //display defender in black
 
                 boxNum = "#box2" + j;          
 
@@ -90,13 +100,11 @@ $(".char").on("click",function(){
         charDiv[charIndex2].animate({top:"-20px",left:"350px"},2000);
 
         $(".attack").show();
-    //    $("#newbattle").show();
-        $(".next").show();
-        
-        
-        
-    } // end of stage 2 if
-    else {      // this block will be for 'attack' clicks
+              
+    } // end of stage 2 'if' block
+
+    else {      // this block may not be used; it's diagnostic
+
         console.log("Stage is not 1 or 2");
     }
     
@@ -106,13 +114,13 @@ $(".char").on("click",function(){
 // this intentionally resets characters so new opponents can be chosen
     $("#newbattle").on("click",function(){
         for (var k=0; k<char.length; k++){
-            charDiv[k]= charDiv[k].detach();
-            boxNum = "#box0" + i;
-            $(boxNum).append(charDiv[i]);  //add to back
+            charDiv[k]= charDiv[k].detach();    //remove from wherever they are
+            boxNum = "#box0" + k;
+            $(boxNum).append(charDiv[k]);  //add to first row
          }
     })
 
-    //initialize character health before click events
+
 
 
     $(".attack").on("click",function(){
@@ -126,8 +134,8 @@ $(".char").on("click",function(){
     
         attackPower = attack*attackCount;   //attack power this time
 
-       // attackerHealth -= counterAttackPower   //update each click if init outside click event
-       // defenderHealth -=  attackPower          //update each click if init outside click event
+       // attackerHealth -= counterAttackPower   //update health if init outside click event
+       // defenderHealth -=  attackPower          //update health if init outside click event
 
         attackerHealth = aHealth -  attackCount * counterAttackPower;  //calc cum each time
         defenderHealth = dHealth - (attackCount)*((1+attackCount)/2)*attack;
@@ -135,12 +143,17 @@ $(".char").on("click",function(){
         if(attackerHealth <= 0){
             losses++;
             $(".box2").hide();
+            //$(".next").show();
+            $("#newbattle").show();   //keep hidden until win or loss occurs
+
+            
             //game over; new game
            }
         else if(defenderHealth <=0){
             wins ++;
             $(".box2").hide();
-                //next defender
+            $(".next").show();  //next defender          
+            
         }
 
        $("#health").html("Health: " + attackerHealth + "  Attack Strength: " + attackPower);
@@ -149,25 +162,33 @@ $(".char").on("click",function(){
     })
 
 $(".next").on("click",function(){ // only allow this option in the case of a win (show )
-    for (var i =0; i<char.length; i++){
+
+    for (var i =0; i<char.length; i++){ // go thru all characters, though 2 have been selected out
+
         //bring up next 2 available defenders
-        if (i == charIndex2){
+        // this would be a good time to used "defenders" array (not tested yet)
+        // ('defenders' array holds indices of characters not yet selected in an array)
+
+        if (i == charIndex2){       //remove defender (not visible) from div
             boxNum = "#box2" + i;          
-            charDiv[i]=charDiv[i].detach();
-                            
+            charDiv[i]=charDiv[i].detach();                          
         }
-        if ((i != charIndex1)&&(i != charIndex2)) {
+
+        if ((i != charIndex1)&&(i != charIndex2)) { //find remaining 2 and display for selection
 
            // charDiv[i] = charDiv[i].detach();
             boxNum = "#box1" + i;         
 
             charDiv[i].appendTo(boxNum);
             charDiv[i].css('background-color','red');
-            charDiv[i].css('margin','3px');   
+            charDiv[i].css('margin','3px');  
+            
+            //move them up higher
+            charDiv[i].css('top','-20px');
 
         } //end of if that displays remaining defender candidates
 
-        stage = 2;      //next character click sets up battle
+        stage = 1;      //next character click sets up battle
     }
 })
 
