@@ -4,7 +4,6 @@ var charIndex = -1, defIndex;
 var charIndex1, charIndex2;
 var charName, charImg;
 var name,hp,ap,rp;
-var stage = 0;
 var boxNum, boxToEmpty;
 var ahealth, dhealth, attackerHealth, defenderHealth, attackPower, counterAttackPower;
 var attack, attackCount, wins, losses;
@@ -21,36 +20,51 @@ $(".attack").hide();
 $(".next").hide();
 $("#newbattle").hide();
 $("#left").hide();
+wins = 0;
+losses = 0;
+
 
 initialize();
 
 $("#start").on("click",function(){
     $("#left").show();
-    $("#start").hide();
+    $("#start").hide(); 
 });
     
+var stage = 0;  //initialize 'stage' of character selection process
 
+//stage 1 is choose my character;  stage 2 is choose first defender
+// in stage 3 second defender is chosen (last def is who's left)
 
- 
 $(".char").on("click",function(){
 
     charIndex = $(this).val();
-    console.log(charIndex);
-
+    console.log('Index of clicked character is ' + charIndex);
 
     stage++;
     console.log(stage);
 
     if (stage == 1){        // in stage 1 original attacker is chosen (index = charIndex1)
         charIndex1 = charIndex;
+
+        // set up stats for attacker here, when he is first chosen.  These won't reset
+        // until a new attacker is chosen
+
+        attack = char[charIndex1].ap;       //base attack power - increases each time
+        aHealth = char[charIndex1].hp;   // I chose to initialize these in here        
+        attackerHealth = aHealth;
+        attackPower = attack;
+
       for (var i=0; i<char.length; i++){
          
         if (i != charIndex1){       //using 'detach' and 'appendTo' preserves attributes of divs
             
             defenders.push(i);      //create an array of defenders (not yet used...)
 
+            // 'store' all defenders in 3rd set of boxes for duration of game 
+
             charDiv[i] = charDiv[i].detach();
-             boxNum = "#box1" + i;          
+             boxNum = "#box2" + i;          
              charDiv[i].appendTo(boxNum);
              charDiv[i].css('background-color','red');
              charDiv[i].css('margin','3px');
@@ -67,15 +81,23 @@ $(".char").on("click",function(){
 
         charIndex2 = charIndex;
 
+        // I am trying to create a defenders array, to simplify some if statements
+        // currently I am having trouble with this (it's being tested, not used)
+
         defIndex=defenders.indexOf(charIndex2);  //where in the array is this index found?
 
         console.log("defender chosen was at index "+defIndex);// getting -1 right now
 
-        defenders.splice(defIndex, 1);      //try to modify defenders array for next cycle (not yet used)
+        //with splice, it's the element AFTER the selected index that is removed
+
+        defenders.splice(defIndex-1, 1);      //try to modify defenders array for next cycle (not yet used)
 
         console.log('remaining defender indices: ' + defenders); //not working
         console.log("defender chosen: " + char[charIndex2].name);   //is working
    
+        // end of defender array block, for now
+
+
         for (var j=0; j<char.length; j++){  // remove non-chosen players from display
              
             if ((j != charIndex1)&&(j != charIndex2)) {
@@ -84,9 +106,9 @@ $(".char").on("click",function(){
       
             } //end of if that clears non-chosen players
 
-            else if (j == charIndex2){      //display defender in black
+            else if (j == charIndex2){      //display defender in black in center block set
 
-                boxNum = "#box2" + j;          
+                boxNum = "#box1" + j;          
 
                 charDiv[j].appendTo(boxNum);
                 charDiv[j].css('background-color','black');
@@ -100,6 +122,17 @@ $(".char").on("click",function(){
         charDiv[charIndex2].animate({top:"-20px",left:"350px"},2000);
 
         $(".attack").show();
+        $(".next").hide();      
+
+        dHealth = char[charIndex2].hp;
+        defenderHealth = dHealth;
+        counterAttackPower = char[charIndex2].rp;   //this is constant
+        
+        // initialize stats in display;  only defender stats will change here
+
+        $("#health").html("Health: " + attackerHealth + "  Attack Strength (next): " + attackPower);
+        $("#defender").html("Defender health: " + defenderHealth+ " Counterattack: "+ counterAttackPower);         
+ 
               
     } // end of stage 2 'if' block
 
@@ -126,13 +159,13 @@ $(".char").on("click",function(){
     $(".attack").on("click",function(){
         attackCount++;    //make sure this doesn't reset until lose or win against all 3              
 
-        attack = char[charIndex1].ap;       //base attack power - increases each time
-        counterAttackPower = char[charIndex2].rp;   //this is constant
+        // attack = char[charIndex1].ap;       //base attack power - increases each time
+        // counterAttackPower = char[charIndex2].rp;   //this is constant
 
-        aHealth = char[charIndex1].hp;   // I chose to initialize these in here
-        dHealth = char[charIndex2].hp;   
+        // aHealth = char[charIndex1].hp;   // I chose to initialize these in here
+        // dHealth = char[charIndex2].hp;   
     
-        attackPower = attack*attackCount;   //attack power this time
+        attackPower = attack*(attackCount+1);   //attack power this time
 
        // attackerHealth -= counterAttackPower   //update health if init outside click event
        // defenderHealth -=  attackPower          //update health if init outside click event
@@ -146,6 +179,13 @@ $(".char").on("click",function(){
             //$(".next").show();
             $("#newbattle").show();   //keep hidden until win or loss occurs
 
+            //reset characters to original position;
+            for (var jj = 0; jj<char.length; jj++){
+                charDiv[jj] = charDiv[jj].detach();               
+            }
+            charDiv[charIndex1].css({top:"0px",left:"0px"});
+            
+            initialize();
             
             //game over; new game
            }
@@ -156,7 +196,7 @@ $(".char").on("click",function(){
             
         }
 
-       $("#health").html("Health: " + attackerHealth + "  Attack Strength: " + attackPower);
+       $("#health").html("Health: " + attackerHealth + "  Attack Strength (next): " + attackPower);
        $("#defender").html("Defender health: " + defenderHealth+ " Counterattack: "+ counterAttackPower);         
        $("#stats").html("Wins: " + wins + "  Losses: " + losses);  
     })
@@ -187,7 +227,7 @@ $(".next").on("click",function(){ // only allow this option in the case of a win
             charDiv[i].css('top','-20px');
 
         } //end of if that displays remaining defender candidates
-
+        
         stage = 1;      //next character click sets up battle
     }
 })
@@ -253,8 +293,6 @@ function charCardCreate(index,backColor,textColor){
 
 function initialize(){      // execute on start
     
-        wins = 0;
-        losses = 0;
         attackCount = 0;
     
         for (var i=0; i<char.length; i++){
