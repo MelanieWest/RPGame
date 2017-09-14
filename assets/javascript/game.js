@@ -1,12 +1,12 @@
 $(document).ready(function(){
 var char=[], charDiv=[], defenders =[];
 var charIndex = -1, defIndex;
-var charIndex1, charIndex2;
+var charIndex1, charIndex2, charIndex3, charIndexDef,charIndexLast;
 var charName, charImg;
 var name,hp,ap,rp;
 var boxNum, boxToEmpty;
 var ahealth, dhealth, attackerHealth, defenderHealth, attackPower, counterAttackPower;
-var attack, attackCount, wins, losses;
+var attack, attackCount, wins, losses, victories;
 
 
     char[0] = new charConstructor('Bugs Bunny',"assets/images/bugsicon.jpg",100,8,10);
@@ -61,7 +61,8 @@ $(".char").on("click",function(){
             
             defenders.push(i);      //create an array of defenders (not yet used...)
 
-            // 'store' all defenders in 3rd set of boxes for duration of game 
+            // remove defenders from row '0' and store' them in row '2' for duration of game 
+            // (staged background is red)
 
             charDiv[i] = charDiv[i].detach();
              boxNum = "#box2" + i;          
@@ -77,52 +78,75 @@ $(".char").on("click",function(){
 
     }   //end of stage 1 
     
-    else if (stage == 2){           // in stage 2 defender is chosen (index = charIndex2)
+    else if (stage == 2){           // in stage 2 defender is chosen (index = charIndexDef)
 
-        charIndex2 = charIndex;
+        charIndexDef = charIndex;   //general defender index
+
+        //use charIndex2 and charIndex3 to track which indices have been 'used'
+        //until I get the defender array working there will be lots of if statements here
+        // 3 wins = 1 victory;  after a loss or a 'victory' wins will be reset.
+
+        if (wins == 0) {charIndex2 = charIndex;} 
+        else if (wins == 1) {charIndex3 = charIndex;} 
+
+
+        console.log("index of defender is "+charIndexDef);
 
         // I am trying to create a defenders array, to simplify some if statements
         // currently I am having trouble with this (it's being tested, not used)
 
-        defIndex=defenders.indexOf(charIndex2);  //where in the array is this index found?
+        defIndex = defenders.indexOf(charIndexDef);  //where in the array is this index found?
 
-        console.log("defender chosen was at index "+defIndex);// getting -1 right now
+        console.log ("defender chosen was at index " + defIndex);// getting -1 right now. Can't see why
 
         //with splice, it's the element AFTER the selected index that is removed
 
-        defenders.splice(defIndex-1, 1);      //try to modify defenders array for next cycle (not yet used)
+        defenders.splice(defIndex, 1);      //this always removes the middle index.  Not helpful
 
         console.log('remaining defender indices: ' + defenders); //not working
-        console.log("defender chosen: " + char[charIndex2].name);   //is working
+        console.log("defender chosen: " + char[charIndexDef].name);   //is working
    
         // end of defender array block, for now
 
 
-        for (var j=0; j<char.length; j++){  // remove non-chosen players from display
+        // for (var j=0; j<char.length; j++){  // remove non-chosen players from display
              
-            if ((j != charIndex1)&&(j != charIndex2)) {
-    
-                charDiv[j] = charDiv[j].detach();
-      
-            } //end of if that clears non-chosen players
+        //     if ((j != charIndex1)&&(j != charIndex2)) {
 
-            else if (j == charIndex2){      //display defender in black in center block set
+        //         //only hide other defenders and show them later
+        //         //charDiv[j] = charDiv[j].detach();
+        //         //charDiv[j].hide();
+                
+        //           } //end of if
 
-                boxNum = "#box1" + j;          
+           // if (j == charIndexDef){      //display defender in black in center block set
 
-                charDiv[j].appendTo(boxNum);
-                charDiv[j].css('background-color','black');
-                charDiv[j].css('margin','3px');    
+                $(".box0").show();  //show current attacker
+           
+                charDiv[charIndexDef] = charDiv[charIndexDef].detach();
 
-            }  // end of else that stages defender
+                boxNum = "#box1" + charIndexDef;          
+
+                charDiv[charIndexDef].appendTo(boxNum);
+                charDiv[charIndexDef].css('background-color','black');
+                charDiv[charIndexDef].css('margin','3px');  
+
+                //clear non-chosen players
+               
+                $(".box2").hide();
+                
+
+           // }  // end of else that stages defender
             
-        } //end of for
+        //} //end of for
 
         charDiv[charIndex1].animate({top:"190px",left:"80px"},2000);
-        charDiv[charIndex2].animate({top:"-20px",left:"350px"},2000);
+        charDiv[charIndexDef].animate({top:"-20px",left:"350px"},2000);
 
         $(".attack").show();
         $(".next").hide();      
+
+        //new defender stats initialized
 
         dHealth = char[charIndex2].hp;
         defenderHealth = dHealth;
@@ -181,9 +205,9 @@ $(".char").on("click",function(){
 
             //reset characters to original position;
             for (var jj = 0; jj<char.length; jj++){
-                charDiv[jj] = charDiv[jj].detach();               
+                charDiv[jj] = charDiv[jj].detach();   //detatch all characters and prep for reset            
             }
-            charDiv[charIndex1].css({top:"0px",left:"0px"});
+            charDiv[charIndex1].css({top:"0px",left:"0px"}); //send attacker's box back to toop
             
             initialize();
             
@@ -191,8 +215,49 @@ $(".char").on("click",function(){
            }
         else if(defenderHealth <=0){
             wins ++;
-            $(".box2").hide();
-            $(".next").show();  //next defender          
+
+            //remove current defender
+            charDiv[charIndexDef]=charDiv[charIndexDef].detach();                          
+            
+            $(".box0").hide();  //hide current attacker
+                         
+            
+            //$(".next").show();  //next defender button
+            $(".box2").show();  //show remaining defenders 
+            if (wins == 1){
+
+                $(".box2").show();  //show remaining defenders
+
+                for (var i = 0; i<char.length; i++){
+
+                    if (i != charIndex1){
+                    charDiv[i].css('background-color','red');
+                    charDiv[i].css('margin','3px');  
+                    //move them up higher
+                    charDiv[i].css('top','-20px');
+                    }               
+                }
+                
+                 
+            }
+            if (wins == 2){
+                for (var kk=0; kk<char.length; kk++){
+
+                    if((kk!= charIndex1) &&(kk!= charIndex2)&&(kk!= charIndex3)){
+                        charIndexLast = kk;
+                    }
+                    else if ((kk==charIndex2)||(kk==charIndex3)){
+                        charDiv[kk] = charDiv[kk].detach();                        
+                    }
+                }
+                boxNum = "#box1" + charIndexLast;          
+                
+                    charDiv[charIndexLast].appendTo(boxNum);
+                    charDiv[charIndexLast].css('background-color','black');
+                    charDiv[charIndexLast].css('margin','3px');    
+                
+            }
+            stage=1;   //it will increment to stage 2 when a character is clicked     
             
         }
 
@@ -217,9 +282,11 @@ $(".next").on("click",function(){ // only allow this option in the case of a win
         if ((i != charIndex1)&&(i != charIndex2)) { //find remaining 2 and display for selection
 
            // charDiv[i] = charDiv[i].detach();
-            boxNum = "#box1" + i;         
+            // boxNum = "#box1" + i;         
 
-            charDiv[i].appendTo(boxNum);
+            // charDiv[i].appendTo(boxNum);
+            $(".box2").show();
+
             charDiv[i].css('background-color','red');
             charDiv[i].css('margin','3px');  
             
@@ -228,7 +295,7 @@ $(".next").on("click",function(){ // only allow this option in the case of a win
 
         } //end of if that displays remaining defender candidates
         
-        stage = 1;      //next character click sets up battle
+        stage = 1;      //next character click chooses next defender & sets up battle
     }
 })
 
@@ -291,9 +358,12 @@ function charCardCreate(index,backColor,textColor){
  
 }
 
-function initialize(){      // execute on start
+function initialize(){      // execute on start or reset, as called upon
     
         attackCount = 0;
+        stage = 0;
+        charIndex1 = -1;
+        charIndex2 = -1;
     
         for (var i=0; i<char.length; i++){
     
