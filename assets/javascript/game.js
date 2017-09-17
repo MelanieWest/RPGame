@@ -7,6 +7,7 @@ var name,hp,ap,rp;
 var boxNum, boxToEmpty;
 var ahealth, dhealth, attackerHealth, defenderHealth, attackPower, counterAttackPower;
 var attack, attackCount, wins, losses, victories;
+var posTop, posLeft; 
 
 
     char[0] = new charConstructor('Bugs Bunny',"assets/images/bugsicon.jpg",100,8,10);
@@ -70,7 +71,7 @@ $(".char").on("click",function(){
              charDiv[i].appendTo(boxNum);
              charDiv[i].css('background-color','red');
              charDiv[i].css('margin','3px');
-      
+            $(".box2").show(); 
 
         } //end of if       
       } //end of for
@@ -143,6 +144,10 @@ $(".char").on("click",function(){
     $("#newbattle").on("click",function(){
 
         for (var k=0; k<char.length; k++){
+            posTop = 0 + 'px';
+            posLeft = k*200 + 'px';
+            charDiv[k].animate({top: posTop,left: posLeft},2000);
+    
             charDiv[k]= charDiv[k].detach();    //remove from wherever they are
             boxNum = "#box0" + k;
             charDiv[k].appendTo(boxNum);
@@ -178,13 +183,25 @@ $(".char").on("click",function(){
             $("#newbattle").show();   //keep hidden until win or loss occurs
 
             //reset characters to original position;
-            for (var jj = 0; jj<char.length; jj++){
-                charDiv[jj] = charDiv[jj].detach();   //detatch all characters and prep for reset            
-            }
-            charDiv[charIndex1].css({top:"0px"}); //send attacker's box back to toop
-            
-            initialize();
-            
+            for (var k=0; k<char.length; k++){
+                posTop = 0 + 'px';
+                posLeft = k*150 + 'px';
+                charDiv[k].animate({top: posTop,left: posLeft},2000);
+        
+                charDiv[k]= charDiv[k].detach();    //remove from wherever they are
+                boxNum = "#box0" + k;
+                charDiv[k].appendTo(boxNum);
+                charDiv[k].css('background-color','yellow');
+                charDiv[k].css('margin','3px'); 
+                $(".box0" ).show();
+    
+             }
+             wins   = 0;
+             stage  = 0;
+             attackCount = 0;
+             charIndex1 = -1;
+             charIndex2 = -1;
+                
             //game over; new game
            }
         else if(defenderHealth <=0){
