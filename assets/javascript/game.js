@@ -16,6 +16,15 @@ var posTop, posLeft;
     char[3] = new charConstructor('Yosemite Sam',"assets/images/samicon.png",200,6,12);
   
 //initialize cards (stage = 0)
+// $("#playAudio").on("click",play);
+// $("#pauseAudio").on("click",pause);
+
+// function play(){
+//     $("#theme").play();  
+// }
+// function pause(){
+//     $("#theme").pause();  
+// }
 
 $(".attack").hide();
 $(".next").hide();
